@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "node-image-puller.fullname" . }}
+  labels:
+  {{- include "node-image-puller.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+  {{- include "node-image-puller.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+    {{- include "node-image-puller.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "node-image-puller.serviceAccountName" . }}
+      securityContext:
+      {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: docker
+            mountPath: /var/run/docker.sock
+          resources:
+      {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: docker
+          hostPath:
+            path: /var/run/docker.sock
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+    {{- toYaml . | nindent 8 }}
+  {{- end }}
