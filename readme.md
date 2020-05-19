@@ -9,7 +9,7 @@ We can pull and push the image from our laptop and push to ecr or docker io, the
 
 Update the config in config/imagelist or anywhere you like, and set the ENV ${CONFIG_URL} for the DaemonSet, the DaemonSet will sync the config url every 60 seconds, and pull the image for the node.
 
-##Deploy
+## Deploy
 ```shell script
 #use helm3 to deploy the service
 cd deploy
