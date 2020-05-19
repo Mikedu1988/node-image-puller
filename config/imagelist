@@ -1,0 +1,4 @@
+duliyang/etcd:v3.2.27|quay.io/coreos/etcd:localtest
+prom/prometheus:v2.14.0
+fluent/fluent-bit:1.3.11
+coredns/coredns:1.2.2
