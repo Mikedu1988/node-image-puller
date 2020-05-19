@@ -3,8 +3,9 @@ strB="\|"
 sourceImage=""
 targetImage=""
 while true; do
-  #  echo "download image list"
-  #  rm imagelist
+  echo "download image list from config url:${CONFIG_URL}"
+  rm imagelist
+  curl ${CONFIG_URL} -o imagelist
   cat imagelist | while read LINE; do
     echo ${LINE}
     if [[ ${LINE} =~ ${strB} ]]; then
@@ -14,7 +15,7 @@ while true; do
       sourceImage=${LINE}
       targetImage=${LINE}
     fi
-    skopeo inspect docker-daemon:${targetImage} >> /dev/null
+    skopeo inspect docker-daemon:${targetImage} >>/dev/null
     if [[ $? -eq 0 ]]; then
       echo "image exists on node, do nothing"
     else

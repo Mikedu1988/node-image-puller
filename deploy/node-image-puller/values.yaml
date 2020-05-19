@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: duliyang/node-image-puller
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 imagePullSecrets: []
 nameOverride: ""
